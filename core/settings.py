@@ -72,7 +72,7 @@ INTERNAL_IPS = [
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-ROOT_URLCONF = 'dtb.urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
@@ -90,8 +90,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'dtb.wsgi.application'
-ASGI_APPLICATION = 'dtb.asgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
+ASGI_APPLICATION = 'core.asgi.application'
 
 
 # Database

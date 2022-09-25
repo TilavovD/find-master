@@ -4,7 +4,7 @@ import sys
 import telegram
 from telegram import Bot
 
-from dtb.settings import TELEGRAM_TOKEN
+from core.settings import TELEGRAM_TOKEN
 
 
 bot = Bot(TELEGRAM_TOKEN)

@@ -1,5 +1,5 @@
 from arcgis.models import Arcgis
-from dtb.celery import app
+from core.celery import app
 
 
 @app.task(ignore_result=True)

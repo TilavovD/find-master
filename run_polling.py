@@ -1,12 +1,12 @@
 import os, django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dtb.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 django.setup()
 
 from telegram import Bot
 from telegram.ext import Updater
 
-from dtb.settings import TELEGRAM_TOKEN
+from core.settings import TELEGRAM_TOKEN
 from tgbot.dispatcher import setup_dispatcher
 
 

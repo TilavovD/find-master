@@ -7,7 +7,7 @@ from telegram.ext import (
     CallbackQueryHandler,
 )
 
-from dtb.settings import DEBUG
+from core.settings import DEBUG
 from tgbot.handlers.broadcast_message.manage_data import CONFIRM_DECLINE_BROADCAST
 from tgbot.handlers.broadcast_message.static_text import broadcast_command
 from tgbot.handlers.onboarding.manage_data import SECRET_LEVEL_BUTTON

@@ -7,7 +7,7 @@ from typing import Union, List, Optional, Dict
 
 import telegram
 
-from dtb.celery import app
+from core.celery import app
 from celery.utils.log import get_task_logger
 from tgbot.handlers.broadcast_message.utils import send_one_message, from_celery_entities_to_entities, \
     from_celery_markup_to_markup

@@ -4,7 +4,7 @@ import telegram
 from telegram import Update
 from telegram.ext import CallbackContext
 
-from dtb.settings import DEBUG
+from core.settings import DEBUG
 from .manage_data import CONFIRM_DECLINE_BROADCAST, CONFIRM_BROADCAST
 from .keyboards import keyboard_confirm_decline_broadcasting
 from .static_text import broadcast_command, broadcast_wrong_format, broadcast_no_access, error_with_html, \

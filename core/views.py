@@ -4,8 +4,8 @@ from django.views import View
 from django.http import JsonResponse
 from telegram import Update
 
-from dtb.celery import app
-from dtb.settings import DEBUG
+from core.celery import app
+from core.settings import DEBUG
 from tgbot.dispatcher import dispatcher
 from tgbot.main import bot
 
