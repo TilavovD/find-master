@@ -4,7 +4,7 @@
 from telegram.ext import (
     Dispatcher, Filters,
     CommandHandler, MessageHandler,
-    CallbackQueryHandler,
+    CallbackQueryHandler, ConversationHandler,
 )
 
 from core.settings import DEBUG
@@ -19,6 +19,10 @@ from tgbot.handlers.onboarding import handlers as onboarding_handlers
 from tgbot.handlers.broadcast_message import handlers as broadcast_handlers
 from tgbot.main import bot
 
+from tgbot.handlers.onboarding.static_text import need_master, i_am_master
+
+NAME, EXPERIENCE, PHONE_NUMBER, IMAGE = range(4)
+
 
 def setup_dispatcher(dp):
     """
@@ -26,6 +30,28 @@ def setup_dispatcher(dp):
     """
     # onboarding
     dp.add_handler(CommandHandler("start", onboarding_handlers.command_start))
+    conv_handler = ConversationHandler(
+        entry_points=[MessageHandler(Filters.text(i_am_master), onboarding_handlers.need_master)],
+        states={
+            NAME: [
+                MessageHandler(Filters.text & ~Filters.command, onboarding_handlers.name_handler),
+            ],
+            EXPERIENCE: [
+                MessageHandler(Filters.text & ~Filters.command, onboarding_handlers.exp_handler),
+            ],
+            PHONE_NUMBER: [
+                MessageHandler(Filters.text & ~Filters.command, onboarding_handlers.phone_number_handler),
+                MessageHandler(Filters.contact, onboarding_handlers.phone_number_handler),
+            ],
+            IMAGE: [
+                MessageHandler(Filters.photo, onboarding_handlers.image_handler),
+            ]
+        },
+        fallbacks=[],
+        allow_reentry=True
+
+    )
+    dp.add_handler(conv_handler)
 
     # admin commands
     dp.add_handler(CommandHandler("admin", admin_handlers.admin))
@@ -41,7 +67,8 @@ def setup_dispatcher(dp):
 
     # broadcast message
     dp.add_handler(
-        MessageHandler(Filters.regex(rf'^{broadcast_command}(/s)?.*'), broadcast_handlers.broadcast_command_with_message)
+        MessageHandler(Filters.regex(rf'^{broadcast_command}(/s)?.*'),
+                       broadcast_handlers.broadcast_command_with_message)
     )
     dp.add_handler(
         CallbackQueryHandler(broadcast_handlers.broadcast_decision_handler, pattern=f"^{CONFIRM_DECLINE_BROADCAST}")

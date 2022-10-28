@@ -1,7 +1,14 @@
-start_created = "Sup, {first_name}!"
-start_not_created = "Welcome back, {first_name}!"
-unlock_secret_room = "Congratulations! You've opened a secret room👁‍🗨. There is some information for you:\n" \
-           "<b>Users</b>: {user_count}\n" \
-           "<b>24h active</b>: {active_24}"
-github_button_text = "GitHub"
-secret_level_button_text = "Secret level🗝"
+start_created = "Assalomu alaykum, {first_name}!"
+start_not_created = "Xush ko'rdik, {first_name}!"
+
+need_master = "Menga usta kerak"
+i_am_master = "Men ustaman"
+
+name = "Ism-familiyangizni kiriting: "
+year_of_experience = "Ish tajribangiz necha yillik ekanligini kiriting: "
+year_of_experience_error_text = "Iltimos faqat raqam kiriting!"
+phone_number = "Telefon raqamingizni <+998991112233> formatida kiriting yoki pastdagi 'Raqamni ulashish' " \
+               "tugmasini bosing!"
+phone_number_error_text = "Telefon raqam noto'g'ri formatda kiritildi. Iltimos tekshirib, qaytadan kiriting yoki " \
+                          "shunchaki pastdagi 'Raqamni ulashish' tugmasini bosing!"
+share_image_text = "Rasmingizni jo'nating!"
