@@ -1,6 +1,4 @@
 import datetime
-from io import BytesIO
-import numpy as np
 from django.utils import timezone
 from telegram import ParseMode, Update, ReplyKeyboardRemove
 from telegram.ext import CallbackContext
@@ -9,6 +7,8 @@ from master.models import Master
 from tgbot.handlers.onboarding import static_text
 from tgbot.handlers.utils.info import extract_user_data_from_update
 from users.models import User
+from master.models import Region
+from master.models import District
 from tgbot.handlers.onboarding.keyboards import make_keyboard_for_start_command, make_keyboard_for_number_sharing, \
     make_keyboard_for_remain_anonymous
 
@@ -57,10 +57,10 @@ def exp_handler(update: Update, context: CallbackContext) -> int:
     return 2
 
 
-def phone_number_handler(update: Update, context: CallbackContext):
+def phone_number_handler(update: Update, context: CallbackContext) -> int:
     user = User.get_user(update, context)
     master = Master.objects.filter(user=user).last()
-    num_prefixes = ['99', '98', '97', '95', '94', '93', '91', '90', '88', '77', '33']
+    num_prefixes = ('99', '98', '97', '95', '94', '93', '91', '90', '88', '77', '33')
     if update.message.text:
         number = update.message.text
         text = static_text.phone_number_error_text
@@ -83,14 +83,21 @@ def phone_number_handler(update: Update, context: CallbackContext):
     return 3
 
 
-def image_handler(update: Update, context: CallbackContext):
-    print(update)
+def image_handler(update: Update, context: CallbackContext) -> int:
+    if update.message.text and update.message.text == static_text.remain_anonym:
+        update.message.reply_text(static_text.region)
+        return 4
+
     user = User.get_user(update, context)
     master = Master.objects.filter(user=user).last()
     master.image = update.message.photo[-1].file_id
 
     master.save()
-    context.bot.send_photo(chat_id=user.user_id, photo=master.image)
+    update.message.reply_text(static_text.region)
+    return 4
+
+# def region_handler(update: Update, context: CallbackContext) -> int:
+
 
 
 def secret_level(update: Update, context: CallbackContext) -> None:

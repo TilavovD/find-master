@@ -12,3 +12,6 @@ phone_number = "Telefon raqamingizni <+998991112233> formatida kiriting yoki pas
 phone_number_error_text = "Telefon raqam noto'g'ri formatda kiritildi. Iltimos tekshirib, qaytadan kiriting yoki " \
                           "shunchaki pastdagi 'Raqamni ulashish' tugmasini bosing!"
 share_image_text = "Rasmingizni jo'nating!"
+remain_anonym = "Anonim qoldirish"
+region = "Hududingizni tanlang."
+district = "Tuman/shahringizni tanlang."

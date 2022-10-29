@@ -19,7 +19,7 @@ from tgbot.handlers.onboarding import handlers as onboarding_handlers
 from tgbot.handlers.broadcast_message import handlers as broadcast_handlers
 from tgbot.main import bot
 
-from tgbot.handlers.onboarding.static_text import need_master, i_am_master
+from tgbot.handlers.onboarding.static_text import need_master, i_am_master, remain_anonym
 
 NAME, EXPERIENCE, PHONE_NUMBER, IMAGE = range(4)
 
@@ -40,11 +40,10 @@ def setup_dispatcher(dp):
                 MessageHandler(Filters.text & ~Filters.command, onboarding_handlers.exp_handler),
             ],
             PHONE_NUMBER: [
-                MessageHandler(Filters.text & ~Filters.command, onboarding_handlers.phone_number_handler),
-                MessageHandler(Filters.contact, onboarding_handlers.phone_number_handler),
+                MessageHandler(Filters.contact | Filters.text & ~Filters.command, onboarding_handlers.phone_number_handler),
             ],
             IMAGE: [
-                MessageHandler(Filters.photo, onboarding_handlers.image_handler),
+                MessageHandler(Filters.photo | Filters.text(remain_anonym), onboarding_handlers.image_handler),
             ]
         },
         fallbacks=[],
