@@ -21,7 +21,7 @@ from tgbot.main import bot
 
 from tgbot.handlers.onboarding.static_text import need_master, i_am_master, remain_anonym
 
-NAME, EXPERIENCE, PHONE_NUMBER, IMAGE = range(4)
+NAME, EXPERIENCE, PHONE_NUMBER, IMAGE, REGION, DISTRICT, ADDRESS = range(7)
 
 
 def setup_dispatcher(dp):
@@ -44,6 +44,15 @@ def setup_dispatcher(dp):
             ],
             IMAGE: [
                 MessageHandler(Filters.photo | Filters.text(remain_anonym), onboarding_handlers.image_handler),
+            ],
+            REGION: [
+                MessageHandler(Filters.text & ~Filters.command, onboarding_handlers.region_handler),
+            ],
+            DISTRICT: [
+                MessageHandler(Filters.text & ~Filters.command, onboarding_handlers.district_handler),
+            ],
+            ADDRESS: [
+                MessageHandler(Filters.text & ~Filters.command, onboarding_handlers.address_handler),
             ]
         },
         fallbacks=[],

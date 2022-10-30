@@ -10,7 +10,7 @@ from users.models import User
 from master.models import Region
 from master.models import District
 from tgbot.handlers.onboarding.keyboards import make_keyboard_for_start_command, make_keyboard_for_number_sharing, \
-    make_keyboard_for_remain_anonymous
+    make_keyboard_for_remain_anonymous, make_keyboard_for_regions, make_keyboard_for_districts
 
 
 def command_start(update: Update, context: CallbackContext) -> None:
@@ -69,10 +69,10 @@ def phone_number_handler(update: Update, context: CallbackContext) -> int:
                 _ = int(number[1:])
                 master.phone_number = number
             except ValueError:
-                update.message.reply_text(text, reply_markup=make_keyboard_for_remain_anonymous())
+                update.message.reply_text(text, reply_markup=make_keyboard_for_number_sharing())
                 return 2
         else:
-            update.message.reply_text(text, reply_markup=make_keyboard_for_remain_anonymous())
+            update.message.reply_text(text, reply_markup=make_keyboard_for_number_sharing())
             return 2
 
     elif update.message.contact:
@@ -85,7 +85,7 @@ def phone_number_handler(update: Update, context: CallbackContext) -> int:
 
 def image_handler(update: Update, context: CallbackContext) -> int:
     if update.message.text and update.message.text == static_text.remain_anonym:
-        update.message.reply_text(static_text.region)
+        update.message.reply_text(static_text.region, reply_markup=make_keyboard_for_regions())
         return 4
 
     user = User.get_user(update, context)
@@ -93,11 +93,43 @@ def image_handler(update: Update, context: CallbackContext) -> int:
     master.image = update.message.photo[-1].file_id
 
     master.save()
-    update.message.reply_text(static_text.region)
+    update.message.reply_text(static_text.region, reply_markup=make_keyboard_for_regions())
     return 4
 
-# def region_handler(update: Update, context: CallbackContext) -> int:
 
+def region_handler(update: Update, context: CallbackContext) -> int:
+    user = User.get_user(update, context)
+    master = Master.objects.filter(user=user).last()
+    region = Region.objects.filter(name=update.message.text)
+    if region:
+        master.region = region[0]
+    else:
+        update.message.reply_text(static_text.region, reply_markup=make_keyboard_for_regions())
+        return 4
+    master.save()
+    update.message.reply_text(static_text.district, reply_markup=make_keyboard_for_districts(region[0]))
+    return 5
+
+
+def district_handler(update: Update, context: CallbackContext) -> int:
+    user = User.get_user(update, context)
+    master = Master.objects.filter(user=user).last()
+    district = District.objects.filter(name=update.message.text)
+    if district:
+        master.district = district[0]
+    else:
+        update.message.reply_text(static_text.district, reply_markup=make_keyboard_for_districts(master.region))
+        return 5
+    master.save()
+    update.message.reply_text(static_text.address, reply_markup=ReplyKeyboardRemove())
+    return 6
+
+
+def address_handler(update: Update, context: CallbackContext) -> int:
+    user = User.get_user(update, context)
+    master = Master.objects.filter(user=user).last()
+    master.address = update.message.text
+    update.message.reply_text(static_text.speciality)
 
 
 def secret_level(update: Update, context: CallbackContext) -> None:
